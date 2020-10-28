@@ -307,7 +307,9 @@ protected:
 
     DataWriter* user_datawriter_ = nullptr;
 
-    std::shared_ptr<ITopicPayloadPool> payload_pool_;
+    std::shared_ptr<IPayloadPool> payload_pool_;
+
+    bool is_data_sharing_compatible_;
 
     /**
      *
@@ -412,7 +414,12 @@ protected:
 
     std::shared_ptr<IPayloadPool> get_payload_pool();
 
-    void release_payload_pool();
+    bool init_payload_pool();
+
+    bool release_payload_pool(bool is_initialized = true);
+
+    void set_datasharing_properties(fastrtps::rtps::WriterAttributes& attributes);
+
 };
 
 } /* namespace dds */
