@@ -101,6 +101,7 @@ DataReaderImpl::DataReaderImpl(
     , reader_listener_(this)
     , deadline_duration_us_(qos_.deadline().period.to_ns() * 1e-3)
     , lifespan_duration_us_(qos_.lifespan().duration.to_ns() * 1e-3)
+    , is_data_sharing_compatible_(subscriber_->is_datasharing_compatible(qos_, type_))
 {
 }
 
@@ -189,6 +190,7 @@ ReturnCode_t DataReaderImpl::enable()
 
     // Register the reader
     ReaderQos rqos = qos_.get_readerqos(subscriber_->get_qos());
+    rqos.data_sharing_info.is_compatible = is_data_sharing_compatible_;
     subscriber_->rtps_participant()->registerReader(reader_, topic_attributes(), rqos);
 
     return ReturnCode_t::RETCODE_OK;

@@ -306,6 +306,8 @@ protected:
 
     std::shared_ptr<ITopicPayloadPool> payload_pool_;
 
+    bool is_data_sharing_compatible_;
+
     /**
      * @brief A method called when a new cache change is added
      * @param change The cache change that has been added
