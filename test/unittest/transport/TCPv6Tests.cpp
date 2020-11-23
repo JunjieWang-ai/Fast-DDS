@@ -33,7 +33,7 @@ using TCPv6Transport = eprosima::fastdds::rtps::TCPv6Transport;
 #define GET_PID _getpid
 #else
 #define GET_PID getpid
-#endif
+#endif // if defined(_WIN32)
 
 static uint16_t g_default_port = 0;
 
@@ -41,7 +41,7 @@ uint16_t get_port()
 {
     uint16_t port = static_cast<uint16_t>(GET_PID());
 
-    if(4000 > port)
+    if (4000 > port)
     {
         port += 4000;
     }
@@ -49,24 +49,25 @@ uint16_t get_port()
     return port;
 }
 
-class TCPv6Tests: public ::testing::Test
+class TCPv6Tests : public ::testing::Test
 {
-    public:
-        TCPv6Tests()
-        {
-            HELPER_SetDescriptorDefaults();
-        }
+public:
 
-        ~TCPv6Tests()
-        {
-            eprosima::fastdds::dds::Log::KillThread();
-        }
+    TCPv6Tests()
+    {
+        HELPER_SetDescriptorDefaults();
+    }
 
-        void HELPER_SetDescriptorDefaults();
+    ~TCPv6Tests()
+    {
+        eprosima::fastdds::dds::Log::KillThread();
+    }
 
-        TCPv6TransportDescriptor descriptor;
-        std::unique_ptr<std::thread> senderThread;
-        std::unique_ptr<std::thread> receiverThread;
+    void HELPER_SetDescriptorDefaults();
+
+    TCPv6TransportDescriptor descriptor;
+    std::unique_ptr<std::thread> senderThread;
+    std::unique_ptr<std::thread> receiverThread;
 };
 
 TEST_F(TCPv6Tests, conversion_to_ip6_string)
@@ -127,13 +128,13 @@ TEST_F(TCPv6Tests, opening_and_closing_output_channel)
 
     // Then
     /*
-    ASSERT_FALSE (transportUnderTest.IsOutputChannelOpen(genericOutputChannelLocator));
-    ASSERT_TRUE  (transportUnderTest.OpenOutputChannel(genericOutputChannelLocator));
-    ASSERT_TRUE  (transportUnderTest.IsOutputChannelOpen(genericOutputChannelLocator));
-    ASSERT_TRUE  (transportUnderTest.CloseOutputChannel(genericOutputChannelLocator));
-    ASSERT_FALSE (transportUnderTest.IsOutputChannelOpen(genericOutputChannelLocator));
-    ASSERT_FALSE (transportUnderTest.CloseOutputChannel(genericOutputChannelLocator));
-    */
+       ASSERT_FALSE (transportUnderTest.IsOutputChannelOpen(genericOutputChannelLocator));
+       ASSERT_TRUE  (transportUnderTest.OpenOutputChannel(genericOutputChannelLocator));
+       ASSERT_TRUE  (transportUnderTest.IsOutputChannelOpen(genericOutputChannelLocator));
+       ASSERT_TRUE  (transportUnderTest.CloseOutputChannel(genericOutputChannelLocator));
+       ASSERT_FALSE (transportUnderTest.IsOutputChannelOpen(genericOutputChannelLocator));
+       ASSERT_FALSE (transportUnderTest.CloseOutputChannel(genericOutputChannelLocator));
+     */
 }
 
 #ifndef __APPLE__
@@ -163,8 +164,8 @@ TEST_F(TCPv6Tests, opening_and_closing_input_channel)
     ASSERT_FALSE (transportUnderTest.CloseInputChannel(multicastFilterLocator));
 }
 /*
-TEST_F(TCPv6Tests, send_and_receive_between_both_secure_ports)
-{
+   TEST_F(TCPv6Tests, send_and_receive_between_both_secure_ports)
+   {
     eprosima::fastdds::dds::Log::SetVerbosity(eprosima::fastdds::dds::Log::Kind::Info);
 
     using TLSOptions = TCPTransportDescriptor::TLSConfig::TLSOptions;
@@ -249,12 +250,12 @@ TEST_F(TCPv6Tests, send_and_receive_between_both_secure_ports)
         sem.wait();
     }
     ASSERT_TRUE(sendTransportUnderTest.CloseOutputChannel(outputLocator));
-}
-*/
+   }
+ */
 // TODO SKIP AT THIS MOMENT
 /*
-TEST_F(TCPv6Tests, send_and_receive_between_ports)
-{
+   TEST_F(TCPv6Tests, send_and_receive_between_ports)
+   {
     descriptor.listening_ports.push_back(g_default_port);
     TCPv6Transport transportUnderTest(descriptor);
     transportUnderTest.init();
@@ -297,10 +298,10 @@ TEST_F(TCPv6Tests, send_and_receive_between_ports)
     senderThread->join();
     sem.wait();
     ASSERT_TRUE(transportUnderTest.CloseOutputChannel(outputChannelLocator));
-}
+   }
 
-TEST_F(TCPv6Tests, send_to_loopback)
-{
+   TEST_F(TCPv6Tests, send_to_loopback)
+   {
     TCPv6Transport transportUnderTest(descriptor);
     transportUnderTest.init();
 
@@ -340,15 +341,17 @@ TEST_F(TCPv6Tests, send_to_loopback)
     senderThread->join();
     sem.wait();
     ASSERT_TRUE(transportUnderTest.CloseOutputChannel(outputChannelLocator));
-}
-*/
-#endif
+   }
+ */
+#endif // ifndef __APPLE__
 
 void TCPv6Tests::HELPER_SetDescriptorDefaults()
 {
 }
 
-int main(int argc, char **argv)
+int main(
+        int argc,
+        char** argv)
 {
     eprosima::fastdds::dds::Log::SetVerbosity(eprosima::fastdds::dds::Log::Info);
     g_default_port = get_port();
