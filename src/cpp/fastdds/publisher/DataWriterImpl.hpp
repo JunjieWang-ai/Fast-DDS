@@ -309,7 +309,7 @@ protected:
 
     std::shared_ptr<IPayloadPool> payload_pool_;
 
-    bool is_data_sharing_compatible_;
+    bool is_data_sharing_compatible_ = false;
 
     /**
      *
@@ -418,7 +418,8 @@ protected:
 
     bool release_payload_pool(bool is_initialized = true);
 
-    void set_datasharing_properties(fastrtps::rtps::WriterAttributes& attributes);
+    ReturnCode_t check_datasharing_compatible(
+            const fastrtps::rtps::WriterAttributes& writer_attributes);
 
 };
 
