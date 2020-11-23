@@ -26,9 +26,9 @@
 #include <fastdds/rtps/reader/RTPSReader.h>
 #include <fastdds/rtps/writer/RTPSWriter.h>
 
-#include <fastdds/rtps/transport/UDPv4Transport.h>
-#include <fastdds/rtps/transport/UDPv6Transport.h>
-#include <fastdds/rtps/transport/test_UDPv4Transport.h>
+#include <rtps/transport/UDPv4Transport.h>
+#include <rtps/transport/UDPv6Transport.h>
+#include <rtps/transport/test_UDPv4Transport.h>
 
 #include <fastrtps/utils/IPFinder.h>
 #include <fastrtps/utils/IPLocator.h>
