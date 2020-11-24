@@ -19,33 +19,25 @@
 
 #include <fastdds/rtps/RTPSDomain.h>
 
-#include <fastdds/dds/log/Log.hpp>
-
-#include <fastdds/rtps/history/WriterHistory.h>
-#include <fastdds/rtps/participant/RTPSParticipant.h>
-#include <fastdds/rtps/reader/RTPSReader.h>
-#include <fastdds/rtps/writer/RTPSWriter.h>
-
-#include <rtps/transport/UDPv4Transport.h>
-#include <rtps/transport/UDPv6Transport.h>
-#include <rtps/transport/test_UDPv4Transport.h>
-
-#include <fastrtps/utils/IPFinder.h>
-#include <fastrtps/utils/IPLocator.h>
-#include <fastrtps/utils/System.h>
-#include <fastrtps/utils/md5.h>
-
-#include <fastrtps/xmlparser/XMLProfileManager.h>
-
-#include <rtps/RTPSDomainImpl.hpp>
-#include <rtps/participant/RTPSParticipantImpl.h>
-
-#include <utils/Host.hpp>
-
 #include <chrono>
 #include <thread>
 #include <cstdlib>
 #include <regex>
+
+#include <fastdds/dds/log/Log.hpp>
+#include <fastdds/rtps/history/WriterHistory.h>
+#include <fastdds/rtps/participant/RTPSParticipant.h>
+#include <fastdds/rtps/reader/RTPSReader.h>
+#include <fastdds/rtps/writer/RTPSWriter.h>
+#include <fastrtps/utils/IPFinder.h>
+#include <fastrtps/utils/IPLocator.h>
+#include <fastrtps/utils/System.h>
+#include <fastrtps/utils/md5.h>
+#include <fastrtps/xmlparser/XMLProfileManager.h>
+#include <rtps/RTPSDomainImpl.hpp>
+#include <rtps/participant/RTPSParticipantImpl.h>
+#include <utils/Host.hpp>
+
 
 namespace eprosima {
 namespace fastrtps {
