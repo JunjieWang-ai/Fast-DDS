@@ -191,6 +191,37 @@ bool IPFinder::getIPs(std::vector<info_IP>* vec_name, bool return_loopback)
     freeifaddrs(ifaddr);
     return true;
 }
+
+#endif
+
+#if defined(_WIN32)
+
+bool IPFinder::getAllMACAddress(std::vector<info_MAC>* macs)
+{
+    return false;
+}
+
+#elif defined(__APPLE__)
+
+bool IPFinder::getAllMACAddress(std::vector<info_MAC>* macs)
+{
+    return false;
+}
+
+#elif defined(__linux__)
+
+bool IPFinder::getAllMACAddress(std::vector<info_MAC>* macs)
+{
+    return false;
+}
+
+#else
+
+bool IPFinder::getAllMACAddress(std::vector<info_MAC>* macs)
+{
+    return false;
+}
+
 #endif
 
 bool IPFinder::getIP4Address(LocatorList_t* locators)
