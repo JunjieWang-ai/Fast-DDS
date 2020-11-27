@@ -743,8 +743,7 @@ bool StatelessWriter::matched_reader_add(
         }
     }
 
-    if (is_datasharing_compatible_ &&
-            data.m_qos.data_sharing.kind() != fastdds::dds::DISABLED)
+    if (is_datasharing_compatible_with(data))
     {
 
         if (datasharing_notifier_->add_reader(data.guid()))
