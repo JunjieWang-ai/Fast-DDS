@@ -306,8 +306,6 @@ protected:
 
     std::shared_ptr<ITopicPayloadPool> payload_pool_;
 
-    bool is_data_sharing_compatible_ = false;
-
     /**
      * @brief A method called when a new cache change is added
      * @param change The cache change that has been added
@@ -353,7 +351,8 @@ protected:
     void release_payload_pool();
 
     ReturnCode_t check_datasharing_compatible(
-            const fastrtps::rtps::ReaderAttributes& reader_attributes);
+            const fastrtps::rtps::ReaderAttributes& reader_attributes,
+            bool& is_datasharing_compatible) const;
 
 };
 
