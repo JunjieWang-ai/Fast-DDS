@@ -156,6 +156,12 @@ ReturnCode_t DataWriterImpl::enable()
     }
 
     auto pool = get_payload_pool();
+    if (!pool)
+    {
+        logError(DATA_WRITER, "Problem creating payload pool for associated Writer");
+        return ReturnCode_t::RETCODE_ERROR;
+    }
+
     RTPSWriter* writer = RTPSDomain::createRTPSWriter(
         publisher_->rtps_participant(),
         w_att, pool,
@@ -164,20 +170,12 @@ ReturnCode_t DataWriterImpl::enable()
 
     if (writer == nullptr)
     {
-        release_payload_pool(false);
+        release_payload_pool();
         logError(DATA_WRITER, "Problem creating associated Writer");
         return ReturnCode_t::RETCODE_ERROR;
     }
 
     writer_ = writer;
-
-    if (!init_payload_pool())
-    {
-        release_payload_pool(false);
-        RTPSDomain::removeRTPSWriter(writer);
-        logError(DATA_WRITER, "Problem creating payload pool for associated Writer");
-        return ReturnCode_t::RETCODE_ERROR;
-    }
 
     // In case it has been loaded from the persistence DB, rebuild instances on history
     history_.rebuild_instances();
@@ -252,7 +250,7 @@ DataWriterImpl::~DataWriterImpl()
     {
         logInfo(PUBLISHER, guid().entityId << " in topic: " << type_->getName());
         RTPSDomain::removeRTPSWriter(writer_);
-        release_payload_pool(true);
+        release_payload_pool();
     }
 
     delete user_datawriter_;
@@ -1239,30 +1237,17 @@ std::shared_ptr<IPayloadPool> DataWriterImpl::get_payload_pool()
         else
         {
             payload_pool_ = TopicPayloadPoolRegistry::get(topic_->get_name(), config);
+            if (!std::static_pointer_cast<ITopicPayloadPool>(payload_pool_)->reserve_history(config, false))
+            {
+                auto topic_pool= std::static_pointer_cast<ITopicPayloadPool>(payload_pool_);
+                TopicPayloadPoolRegistry::release(topic_pool);
+            }
         }
     }
     return payload_pool_;
 }
 
-bool DataWriterImpl::init_payload_pool()
-{
-    assert(payload_pool_);
-    assert(writer_ != nullptr);
-
-    PoolConfig config = PoolConfig::from_history_attributes(history_.m_att);
-    if (is_data_sharing_compatible_)
-    {
-        return std::static_pointer_cast<DataSharingPayloadPool>(payload_pool_)->init_shared_memory(
-            writer_->getGuid(),
-            qos_.data_sharing().shm_directory());
-    }
-    else
-    {
-        return std::static_pointer_cast<ITopicPayloadPool>(payload_pool_)->reserve_history(config, false);
-    }
-}
-
-bool DataWriterImpl::release_payload_pool(bool is_initialized)
+bool DataWriterImpl::release_payload_pool()
 {
     assert(payload_pool_);
 
@@ -1276,10 +1261,7 @@ bool DataWriterImpl::release_payload_pool(bool is_initialized)
     else
     {
         auto topic_pool= std::static_pointer_cast<ITopicPayloadPool>(payload_pool_);
-        if (is_initialized)
-        {
-            result = topic_pool->release_history(config, false);
-        }
+        result = topic_pool->release_history(config, false);
         TopicPayloadPoolRegistry::release(topic_pool);
     }
 
