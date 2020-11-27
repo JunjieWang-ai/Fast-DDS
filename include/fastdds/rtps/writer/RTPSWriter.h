@@ -427,8 +427,6 @@ protected:
     bool is_datasharing_compatible_ = false;
     //! The notifier for Datasharing readers
     std::unique_ptr<DataSharingNotifier> datasharing_notifier_;
-    //! Data sharing domain
-    std::vector<uint64_t> data_sharing_domains_;
     //! Data sharing directory
     std::string data_sharing_directory_;
 
@@ -456,8 +454,6 @@ protected:
     virtual bool change_removed_by_history(
             CacheChange_t* a_change) = 0;
 
-    bool is_datasharing_compatible(
-            const ReaderProxyData& rdata);
 private:
 
     RTPSWriter& operator =(
