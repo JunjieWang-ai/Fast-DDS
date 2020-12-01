@@ -187,7 +187,7 @@ private:
 
     bool is_inline_qos_expected_ = false;
     LocatorList_t fixed_locators_;
-    ResourceLimitedVector<ReaderLocator> matched_readers_;
+    ResourceLimitedVector<std::unique_ptr<ReaderLocator>> matched_readers_;
 
     ResourceLimitedVector<GUID_t> late_joiner_guids_;
     SequenceNumber_t first_seq_for_all_readers_;
@@ -197,6 +197,8 @@ private:
     std::vector<std::unique_ptr<FlowController>> flow_controllers_;
     uint64_t last_intraprocess_sequence_number_;
     bool there_are_remote_readers_ = false;
+    ResourceLimitedVector<std::unique_ptr<ReaderLocator>> matched_readers_pool_;
+
 };
 
 } /* namespace rtps */
