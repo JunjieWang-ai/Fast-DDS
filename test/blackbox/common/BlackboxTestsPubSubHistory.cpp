@@ -18,7 +18,8 @@
 #include "PubSubWriter.hpp"
 
 #include <fastrtps/xmlparser/XMLProfileManager.h>
-#include <fastrtps/transport/test_UDPv4Transport.h>
+#include <fastrtps/transport/test_UDPv4TransportDescriptor.h>
+#include <rtps/transport/test_UDPv4Transport.h>
 #include <gtest/gtest.h>
 
 using namespace eprosima::fastrtps;
@@ -593,7 +594,7 @@ TEST(PubSubHistory, PubSubAsReliableKeepAllWithKeyAndMaxSamplesPerInstanceAndLif
     writer.wait_discovery();
     reader.wait_discovery();
 
-    eprosima::fastrtps::rtps::test_UDPv4Transport::test_UDPv4Transport_ShutdownAllNetwork = true;
+    eprosima::fastdds::rtps::test_UDPv4Transport::test_UDPv4Transport_ShutdownAllNetwork = true;
 
     auto data = default_keyedhelloworld_data_generator(2);
 
@@ -608,7 +609,7 @@ TEST(PubSubHistory, PubSubAsReliableKeepAllWithKeyAndMaxSamplesPerInstanceAndLif
     std::thread thread([]()
             {
                 std::this_thread::sleep_for(std::chrono::milliseconds(20));
-                eprosima::fastrtps::rtps::test_UDPv4Transport::test_UDPv4Transport_ShutdownAllNetwork = false;
+                eprosima::fastdds::rtps::test_UDPv4Transport::test_UDPv4Transport_ShutdownAllNetwork = false;
             });
 
     // Send data
