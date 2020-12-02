@@ -61,7 +61,6 @@ set(${PROJECT_NAME}_source_files
     rtps/DataSharing/DataSharingPayloadPool.cpp
     rtps/DataSharing/DataSharingListener.cpp
     rtps/DataSharing/DataSharingNotification.cpp
-    rtps/DataSharing/DataSharingNotifier.cpp
     rtps/reader/WriterProxy.cpp
     rtps/reader/StatefulReader.cpp
     rtps/reader/StatelessReader.cpp

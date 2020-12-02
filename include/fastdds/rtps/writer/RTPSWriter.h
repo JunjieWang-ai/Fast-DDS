@@ -398,6 +398,11 @@ public:
             CDRMessage_t* message,
             std::chrono::steady_clock::time_point& max_blocking_time_point) const override;
 
+    /**
+     * @return Whether the writer is datasharing compatible or not
+     */
+    bool is_datasharing_compatible() const;
+
 protected:
 
     //!Is the data sent directly or announced by HB and THEN sent to the ones who ask for it?.
@@ -422,11 +427,6 @@ protected:
     Duration_t liveliness_lease_duration_;
     //! The liveliness announcement period
     Duration_t liveliness_announcement_period_;
-
-    //! Whether the writer is datasharing compatible or not
-    bool is_datasharing_compatible_ = false;
-    //! The notifier for Datasharing readers
-    std::unique_ptr<DataSharingNotifier> datasharing_notifier_;
 
     void add_guid(
             const GUID_t& remote_guid);
@@ -453,7 +453,7 @@ protected:
             CacheChange_t* a_change) = 0;
 
     bool is_datasharing_compatible_with(
-            const ReaderProxyData& rdata);
+            const ReaderProxyData& rdata) const;
 
 private:
 
