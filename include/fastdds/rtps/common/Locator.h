@@ -223,8 +223,6 @@ inline std::ostream& operator <<(
         std::ostream& output,
         const Locator_t& loc)
 {
-
-
     // Stream Locator kind
     switch (loc.kind)
     {
@@ -291,20 +289,18 @@ inline std::istream& operator >>(
 
     if (s)
     {
-        unsigned int bracket_index;
-        std::string address;
-        std::string str_locator;
 
         std::ios_base::iostate excp_mask = input.exceptions();
 
         try
         {
+            std::string str_locator;
             input.exceptions(excp_mask | std::ios_base::failbit | std::ios_base::badbit);
 
             // First check the locator kind
             input >> str_locator;
 
-            bracket_index = str_locator.find(']');
+            auto bracket_index = str_locator.find(']');
             if (bracket_index == std::string::npos)
             {
                 // Not correct format
